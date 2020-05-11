@@ -1,0 +1,130 @@
+:root {
+  --orange: rgb(240, 93, 52);
+  --yellow: rgb(255, 233, 0);
+  --grey-coal: rgb(77, 78, 83);
+  --blue-green: rgb(34, 156, 178);
+}
+
+body {
+  /* font-family: 'Fira Sans', sans-serif; */
+  font-family: 'Zilla Slab', sans-serif;
+  font-size: 1.5em;
+}
+.remark-code, .remark-inline-code { font-family: 'Fira Code', monospace; }
+.remark-code {
+  font-size: .7em;
+}
+
+.remark-inline-code {
+  background-color: var(--grey-coal);
+  color: white;
+  border-radius: 3px;
+  padding: 0 2px;
+  font-size: .9em;
+}
+.remark-code-line-highlighted {
+  box-shadow: 0 0 0 0.5px rgba(0,0,0,0.05), 0 1px 1px rgba(0,0,0,.3);
+}
+h1 {
+  font-weight: bold;
+  font-size: 1.6em;
+  margin: 0;
+}
+h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: normal;
+  font-style: italic;
+}
+h2 {
+  margin: 0 0 .5em 0;
+}
+
+.remark-slide-content {
+  background-image: url(images/logo-mozilla.svg);
+  background-repeat: no-repeat;
+  background-position: bottom 10px left 10px;
+  background-size: 105px 30px;
+  background-color: white;
+  color: black;
+  padding: 1em 2em;
+}
+
+.cover {
+  font-size: 1em;
+  background-position: 20px 20px;
+  background-size: 210px 60px;
+}
+
+li {
+  margin: .5em 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  text-indent: -1.25em; /* empirically found */
+}
+
+li:before {
+  margin: 0 .3em;
+  color: var(--orange);
+}
+
+ul > li:before {
+  content: '•';
+  font-size: 1.3em;
+}
+
+ol {
+  counter-reset: ol;
+}
+
+ol > li:before {
+  counter-increment: ol;
+  content: counter(ol) '.';
+}
+
+em {
+  font-style: unset;
+  font-weight: bold;
+  color: var(--orange);
+}
+
+img {
+  max-width: 100%;
+  max-height: 460px;
+}
+
+.with-caption img {
+  max-height: 390px;
+}
+
+a {
+  padding: 2px 5px;
+  color: var(--blue-green);
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+}
+
+a:hover {
+  background-color: var(--yellow);
+  color: black;
+  border-radius: 5px;
+  text-shadow: none;
+}
+
+.smaller {
+  font-size: .8em;
+}
+
+.smallest {
+  font-size: .6em;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex p {
+  padding: 0;
+  margin: 0;
+}
