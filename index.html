@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Un profileur, comment ça marche ?</title>
+    <title>Molotov: DoS your own server</title>
     <meta charset="utf-8">
     <link rel='stylesheet' href='fonts/zilla/zilla.css' />
     <link rel='stylesheet' href='fonts/fira/fira.css' />
@@ -16,7 +16,91 @@ class: center, middle, cover
 ## DoS your own server
 
 ---
+# Foreword
 
+.flex[
+![Tarek Ziadé](images/tarek-ziade.jpg)
+
+* Written by Tarek Ziadé
+* documentation: https://molotov.readthedocs.io/en/stable/
+* repository: https://github.com/loads/molotov
+]
+
+---
+# Write small scenarios in Python 3
+
+.smaller[
+```python
+@scenario(1)
+async def shorten_and_expand(session):
+    short_url = await shorten(session)
+    long_url = await expand(session, short_url)
+    assert long_url == _LONG_URL
+
+async def shorten(session):
+    input = dict(longUrl=_LONG_URL)
+    async with session.post(_API + '/shorten', json=input) as resp:
+        assert resp.status == 200
+        res = await resp.json()
+
+    short_url = res['shortUrl']
+    return short_url
+```
+]
+
+Notice:
+* asynchronous
+* assertions
+
+---
+# Several scenarios in one file, with weights
+
+```python
+# Each scenario has a weight. Molotov uses it to determine how often the
+# scenario is picked.
+@scenario(1)
+async def publish_and_delete(session):
+    jwt_token = await publish(session=session, data_size=512)
+    await delete(session=session, jwt_token=jwt_token)
+
+
+@scenario(2)
+async def publish_512(session):
+    await publish(session=session, data_size=512)
+```
+
+They'll run concurrently.
+
+---
+# Run it!
+
+Run only one scenario in one file:
+
+```
+molotov --max-runs 1 --single-mode <name of scenario> -v publish.py
+```
+
+To run the scenarios during 5 seconds, with 50 workers, this is how we can do it:
+```
+molotov -d 5 -w 50 -v publish.py
+```
+
+---
+# Autosizing!
+
+
+To let molotov do its magic and run all tests in a file, this is how we run it:
+```
+molotov --sizing publish.py
+```
+
+---
+# Thanks :-)
+
+Find this talk [online on github](https://github.com/julienw/presentation-molotov-2020) and
+[play it directly on line](https://julienw.github.io/presentation-molotov-2020/)
+
+_QUESTIONS ?_
     </textarea>
     <script src="./lib/remark.js">
     </script>
