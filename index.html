@@ -27,6 +27,12 @@ class: center, middle, cover
 ]
 
 ---
+# Context
+
+* You will deploy a new server or a new version of a server
+* You want to know how many requests per minute it can serve without problems
+
+---
 # Write small scenarios in Python 3
 
 .smaller[
@@ -55,6 +61,7 @@ Notice:
 ---
 # Several scenarios in one file, with weights
 
+.smaller[
 ```python
 # Each scenario has a weight. Molotov uses it to determine how often the
 # scenario is picked.
@@ -68,6 +75,7 @@ async def publish_and_delete(session):
 async def publish_512(session):
     await publish(session=session, data_size=512)
 ```
+]
 
 They'll run concurrently.
 
@@ -76,29 +84,56 @@ They'll run concurrently.
 
 Run only one scenario in one file:
 
+.smaller[
 ```
 molotov --max-runs 1 --single-mode <name of scenario> -v publish.py
 ```
+]
 
 To run the scenarios during 5 seconds, with 50 workers, this is how we can do it:
+.smaller[
 ```
 molotov -d 5 -w 50 -v publish.py
 ```
-
+]
 ---
 # Autosizing!
 
 
 To let molotov do its magic and run all tests in a file, this is how we run it:
 ```
-molotov --sizing publish.py
+$ molotov --sizing publish.py
+***** Molotov v2.0. Happy breaking! ****
+We'll run tests against the endpoint http://localhost:5252.
+Preparing 500 workers...
+OK
+SUCCESSES: 4665 | FAILURES: 0 | WORKERS: 151
+Sizing is over!
+
+Error Ratio 5.09 % obtained with 0 workers.
+
+OVERALL: SUCCESSES: 4814 | FAILURES: 46
+LAST MINUTE: SUCCESSES: 1032 | FAILURES: 46
+
+**** Bye ***
 ```
+
+---
+# Tips and tricks
+
+* use virtualenv
+* Be careful to your limiting factor
+  .smaller[* In my case it was my own bandwidth]
+* To increase the load you can make a docker that runs the test and run one or
+several instances in the CLOUD.
+* use "real packages" and not "file packages" (sorry for the bad Python
+terminology)
 
 ---
 # Thanks :-)
 
 Find this talk [online on github](https://github.com/julienw/presentation-molotov-2020) and
-[play it directly on line](https://julienw.github.io/presentation-molotov-2020/)
+you can [play it directly on line](https://julienw.github.io/presentation-molotov-2020/).
 
 _QUESTIONS ?_
     </textarea>
