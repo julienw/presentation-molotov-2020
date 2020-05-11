@@ -13,8 +13,11 @@
 class: center, middle, cover
 
 # Molotov
-## DoS your own server
+---
+class: center, middle, cover
 
+# Molotov
+## DoS your own server
 ---
 # Foreword
 
@@ -31,6 +34,31 @@ class: center, middle, cover
 
 * You will deploy a new server or a new version of a server
 * You want to know how many requests per minute it can serve without problems
+* You want to run scenarios: orchestrate various calls.
+
+---
+# Other available tools
+
+* [Apache Bench](http://httpd.apache.org/docs/2.4/programs/ab.html): very simple, maybe too simple.
+* [httperf](https://github.com/httperf/httperf) or [siege](https://www.joedog.org/siege-home/): seem good to test one endpoint but don't seem to easily allow orchestration.
+* [Apache JMeter](https://jmeter.apache.org/): a bit old, works well, very UI-oriented.
+* [wrk](https://github.com/wg/wrk): scripting is done in Lua.
+* [locust](https://locust.io/): python-based tool, looks good but heavyweight.
+* [artillery](https://artillery.io/): Node-based tool, scenarios are defined in
+YML so the possibilities are constrained. Orchestration doesn't seem possible.
+
+---
+# Why molotov?
+
+Molotov:
+
+1. allows you to write any scenario in Python;
+2. stays simple (no client/server complex architecture);
+3. still scales up easily.
+---
+class: center, middle, cover
+
+# OK, tell me how this works!
 
 ---
 # Write small scenarios in Python 3
@@ -55,8 +83,8 @@ async def shorten(session):
 ]
 
 Notice:
-* asynchronous
-* assertions
+* asynchronous, allows parallel requests.
+* assertions ensures the code runs correctly.
 
 ---
 # Several scenarios in one file, with weights
@@ -77,7 +105,8 @@ async def publish_512(session):
 ```
 ]
 
-They'll run concurrently.
+They'll run concurrently in parallel workers, using the weights to select the
+scenarios.
 
 ---
 # Run it!
@@ -89,6 +118,8 @@ Run only one scenario in one file:
 molotov --max-runs 1 --single-mode <name of scenario> -v publish.py
 ```
 ]
+
+This is useful to finalize a scenario, but can also serve as a quick smoketest.
 
 To run the scenarios during 5 seconds, with 50 workers, this is how we can do it:
 .smaller[
@@ -121,11 +152,19 @@ LAST MINUTE: SUCCESSES: 1032 | FAILURES: 46
 ---
 # Tips and tricks
 
-* use virtualenv
 * Be careful to your limiting factor
   .smaller[* In my case it was my own bandwidth]
+* If your test is CPU bound (eg: you use crypto in your script) you can run it
+in separate processes instead of just workers in the same process.
 * To increase the load you can make a docker that runs the test and run one or
-several instances in the CLOUD.
+several instances in the CLOUD, closer to your actual server. This suppresses
+the bandwidth problem.
+
+---
+# Tips and tricks
+## Python-specific stuff
+
+* use virtualenv
 * use "real packages" and not "file packages" (sorry for the bad Python
 terminology)
 
